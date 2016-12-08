@@ -3,7 +3,9 @@ module Lib
     example,
     fib,
     fibs1,
-    fibs2
+    fibs2,
+    streamToList,
+    Stream (Empty, Stream)
     ) where
 
 import Data.Array
@@ -45,3 +47,15 @@ fibs2 = fibs2Inner 1 1
 
 fibs2Inner :: Integer -> Integer -> [Integer]
 fibs2Inner a b = a: (fibs2Inner b (a + b))
+
+-- Exercise 3
+
+data Stream a = Empty
+              | Stream a (Stream a)
+
+streamToList :: Stream a -> [a]
+streamToList Empty = []
+streamToList (Stream x stream) = x: (streamToList stream)
+
+instance Show a => Show (Stream a) where
+    show stream = unwords $ map show $ take 20 $ streamToList stream
