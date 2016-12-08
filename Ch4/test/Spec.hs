@@ -26,12 +26,18 @@ tests = TestList
     "fun2' 1" ~: fun2' 1 ~?= 0,
     "fun2' 2" ~: fun2' 2 ~?= 2,
     "fun2' 3" ~: fun2' 3 ~?= 40,
-    --"foldTree' \"abc\"" ~: foldTree "abc" ~?= Leaf
     "rrRotate (Node 2 (Node 1 (Node 0 Leaf 1 Leaf) 2 (Node 0 Leaf 3 Leaf)) 4 (Node 0 Leaf 5 Leaf))" ~: rrRotate (Node 2 (Node 1 (Node 0 Leaf 1 Leaf) 2 (Node 0 Leaf 3 Leaf)) 4 (Node 0 Leaf 5 Leaf)) ~?= Node 2 (Node 0 Leaf 1 Leaf) 2 (Node 1 (Node 0 Leaf 3 Leaf) 4 (Node 0 Leaf 5 Leaf)),
     "insertTree 3 Leaf" ~: insertTree 3 Leaf ~?= Node 0 Leaf 3 Leaf,
     "insertTree 3 (Node 0 Leaf 1 Leaf)" ~: insertTree 3 (Node 0 Leaf 1 Leaf) ~?= Node 1 Leaf 1 (Node 0 Leaf 3 Leaf),
     "foldTree [12]'" ~: foldTree [1, 2] ~?= Node 1 (Node 0 Leaf 1 Leaf) 2 Leaf,
-    "foldTree 'ABCDEFGHIJ'" ~: foldTree "ABCDEFGHIJ" ~?= Node 3 (Node 2 (Node 1 (Node 0 Leaf 'A' Leaf) 'B' Leaf) 'C' (Node 1 (Node 0 Leaf 'D' Leaf) 'E' (Node 0 Leaf 'F' Leaf))) 'G' (Node 1 (Node 0 Leaf 'H' Leaf) 'I' (Node 0 Leaf 'J' Leaf))
+    "foldTree 'ABCDEFGHIJ'" ~: foldTree "ABCDEFGHIJ" ~?= Node 3 (Node 2 (Node 1 (Node 0 Leaf 'A' Leaf) 'B' Leaf) 'C' (Node 1 (Node 0 Leaf 'D' Leaf) 'E' (Node 0 Leaf 'F' Leaf))) 'G' (Node 1 (Node 0 Leaf 'H' Leaf) 'I' (Node 0 Leaf 'J' Leaf)),
+    "xor [False, True, False]" ~: xor [False, True, False] ~?= True,
+    "xor [False, True, False, False, True]" ~: xor [False, True, False, False, True] ~?= False,
+    "xor []" ~: xor [] ~?= False,
+    "map' (+1) [1, 2, 3]" ~: map' (+1) [1, 2, 3] ~?= [2, 3, 4],
+    "myFoldl (+) 1 [1, 2, 3]" ~: myFoldl (+) 1 [1, 2, 3] ~?= 7,
+    "take 5 (foldr (:) [] [1..])" ~: take 5 (foldr (:) [] [1..]) ~?= [1, 2, 3, 4, 5],
+    "take 5 (myFoldl (\\z x -> (x:z)) [] [1..])" ~: take 5 (myFoldl (\z x -> (x:z)) [] [1..]) ~?= [1, 2, 3, 4, 5]
     ]
 
 main = do

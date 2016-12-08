@@ -24,7 +24,10 @@ module Lib
     llRotate,
     rrRotate,
     lrRotate,
-    rlRotate
+    rlRotate,
+    xor,
+    map',
+    myFoldl
     ) where
 
 greaterThan100 :: [Integer] -> [Integer]
@@ -172,3 +175,21 @@ h (Node height _ _ _) = height
 balanceFactor :: Tree a -> Integer
 balanceFactor Leaf = 0
 balanceFactor (Node _ left _ right) = (h left) - (h right)
+
+
+-- Exercise 3 More folds!
+xor :: [Bool] -> Bool
+xor = fold _xor False
+
+_xor :: Bool -> Bool -> Bool
+_xor a b
+    | a == b = False
+    | otherwise = True
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr ff []
+    where ff a xs = (f a):xs
+
+myFoldl :: (a -> b -> a) -> a -> [b] -> a
+myFoldl f = foldr f'
+    where f' z x = f x z
