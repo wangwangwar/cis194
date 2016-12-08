@@ -10,11 +10,13 @@ data-files:
 x-ghc-framework-version: 7.10.3-5.9-2
 x-last-ide-version: HfM1.2.1
 Executable cis19402ADTs
-  main-is: Cis194_02_ADTs.hs
+  main-is: Ch2/Cis194_02_ADTs.hs
   buildable: True
   build-depends:
       base -any,
       split -any
   other-modules:
-      LogAnalysis
-      Log
+      Ch3.Ch3
+      Ch3.Hopscotch
+      Ch2.LogAnalysis
+      Ch2.Log

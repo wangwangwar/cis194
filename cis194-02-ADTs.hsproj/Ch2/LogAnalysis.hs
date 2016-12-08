@@ -1,6 +1,6 @@
-module LogAnalysis where
+module Ch2.LogAnalysis where
   
-import Log
+import Ch2.Log
 import Data.List.Split
 import Text.Read
 

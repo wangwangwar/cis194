@@ -1,5 +1,5 @@
 -- Haskell Playground 1.0
-import LogAnalysis
+import Ch2.LogAnalysis
 
 parseMessage "E 2 562 help help" == LogMessage (Error 2) 562 "help help"
 parseMessage "I 29 la la la" == LogMessage Info 29 "la la la"
