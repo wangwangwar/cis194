@@ -58,7 +58,7 @@ hanoi n a b c
 
 -- Ex6
 -- Tower of Hanoi with four pegs instead of three
-hanoi4 :: Integer -> Peg -> Peg -> Peg -> Peg -> [Move]
+-- hanoi4 :: Integer -> Peg -> Peg -> Peg -> Peg -> [Move]
 
 --hanoi4 n a b c d 
 --  | n == 0 = []
@@ -76,22 +76,5 @@ hanoi4 :: Integer -> Peg -> Peg -> Peg -> Peg -> [Move]
 --  | n == 0 = []
 --  | n == 1 = [(a, d)]
 --  | n >= 2 = (hanoi (n - 2) a d c) ++ (hanoi 2 a b d) ++ (hanoi (n - 2) c b d)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

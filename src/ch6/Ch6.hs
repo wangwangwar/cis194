@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
+
 -- http://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf
 
 module Ch6
@@ -16,6 +19,7 @@ module Ch6
     ) where
 
 import Data.Array
+import Debug.Trace
 
 knapsack01 :: [Double]  -- values
     -> [Integer]        -- nonnegative weights
@@ -53,7 +57,7 @@ fibs2 :: [Integer]
 fibs2 = fibs2Inner 1 1
 
 fibs2Inner :: Integer -> Integer -> [Integer]
-fibs2Inner a b = a: (fibs2Inner b (a + b))
+fibs2Inner a b = a: fibs2Inner b (a + b)
 
 -- Exercise 3
 
@@ -62,7 +66,7 @@ data Stream a = Empty
 
 streamToList :: Stream a -> [a]
 streamToList Empty = []
-streamToList (Stream x stream) = x: (streamToList stream)
+streamToList (Stream x stream) = x: streamToList stream
 
 instance Show a => Show (Stream a) where
     show stream = unwords $ map show $ take 20 $ streamToList stream
@@ -95,3 +99,34 @@ interleaveTwoStreams (Stream x stream1) stream2 = Stream x (interleaveTwoStreams
 -- interleave the Stream of Stream of Integer
 interleaveStreams :: Stream (Stream Integer) -> Stream Integer
 interleaveStreams (Stream xs restStream) = interleaveTwoStreams xs (interleaveStreams restStream)
+
+-- Exercise 6 (Optional)
+--
+-- The essential idea is to work with generating functions of the form
+-- a0 + a1x + a2x2 + · · · + anxn + . . .
+-- where x is just a “formal parameter” (that is, we will never actually
+-- substitute any values for x; we just use it as a placeholder) and all the
+-- coefficients ai are integers. We will store the coefficients a0, a1, a2, . . .
+-- in a Stream Integer.
+
+-- x = 0 + 1x + 0x^2 + 0x^3 + ...
+-- x :: Stream Integer
+
+instance Num (Stream Integer) where
+    -- n = n + 0x + 0x^2 + 0x^3 + ...
+    fromInteger n = Stream n (streamRepeat 0)
+    -- to negate a generating function, negate all its coefficients
+    negate = streamMap negate
+    -- (a0 + a1x + a2x^2 + . . .) + (b0 + b1x + b2x^2 + . . .) = 
+    -- (a0 + b0) + (a1 + b1)x + (a2 + b2)x^2 + . . .
+    (+) (Stream x stream1) (Stream y stream2) = Stream (x + y) (stream1 + stream2)
+    (+) Empty stream2 = stream2
+    (+) stream1 Empty = stream1
+    -- Suppose A = a0 + xA0 and B = b0 + xB0
+    -- AB = (a0 + xA')B
+    --    = a0B + xA'B
+    --    = a0(b0 + xB') + xA'B
+    --    = a0b0 + x(a0B' + A'B)
+    (*) (Stream a0 a') (Stream b0 b') = Stream (a0 * b0) (streamMap (* a0) b' + (a' * Stream b0 b'))
+    (*) Empty _ = Empty
+    (*) _ Empty = Empty

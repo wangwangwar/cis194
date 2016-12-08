@@ -51,3 +51,16 @@ main = hspec $ do
         it "generates a Stream from the infinite list of natural numbers 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, . . ." $ do
             take 8 (streamToList ruler) `shouldBe` [0, 1, 0, 2, 0, 1, 0, 3]
 
+    describe "Num (Stream Integer)" $ do
+        it "returns Stream Integer with fromInteger function" $ do
+            take 5 (streamToList ((fromInteger 3) :: Stream Integer)) `shouldBe` [3, 0, 0, 0, 0]
+
+        it "returns a Stream of negated coefficients when negate" $ do
+            take 5 (streamToList (negate (streamFromSeed (+1) 0 :: Stream Integer))) `shouldBe` [0, -1, -2, -3, -4]
+
+        it "returns the sum of two Streams with (+)" $ do
+            take 5 (streamToList ((streamFromSeed (+1) 0 :: Stream Integer) + (streamFromSeed (+2) 0) :: Stream Integer)) `shouldBe` [0, 3, 6, 9, 12]
+
+        it "returns the multiplication of two: 6x^3 + 7x^2 - 10x + 9 * -2x^3  + 4x - 5 = -12x^6 - 14x^5 + 44x^4 - 20x^3 - 75x^2 + 86x - 45 with (*)" $ do
+            streamToList ((Stream 9 (Stream (-10) (Stream 7 (Stream 6 Empty))) * Stream (-5) (Stream 4 (Stream 0 (Stream (-2) Empty)))) :: Stream Integer) `shouldBe` [-45, 86, -75, -20, 44, -14, -12]
+
