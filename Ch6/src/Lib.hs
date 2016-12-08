@@ -1,3 +1,5 @@
+-- http://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf
+
 module Lib
     ( knapsack01,
     example,
@@ -8,7 +10,9 @@ module Lib
     streamToList,
     streamRepeat,
     streamMap,
-    streamFromSeed
+    streamFromSeed,
+    nats,
+    ruler
     ) where
 
 import Data.Array
@@ -74,3 +78,20 @@ streamMap fun (Stream x stream) = Stream (fun x) (streamMap fun stream)
 
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed transform seed = Stream seed (streamFromSeed transform (transform seed))
+
+-- Exercise 5
+
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0
+
+-- interleave streams [[0, 0, ...], [1, 1, ...], [2, 2, ...], ...]
+ruler :: Stream Integer
+ruler = interleaveStreams (streamMap streamRepeat nats)
+
+-- interleave two streams
+interleaveTwoStreams :: Stream Integer -> Stream Integer -> Stream Integer
+interleaveTwoStreams (Stream x stream1) stream2 = Stream x (interleaveTwoStreams stream2 stream1)
+
+-- interleave the Stream of Stream of Integer
+interleaveStreams :: Stream (Stream Integer) -> Stream Integer
+interleaveStreams (Stream xs restStream) = interleaveTwoStreams xs (interleaveStreams restStream)
