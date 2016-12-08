@@ -1,0 +1,20 @@
+name: cis19402ADTs
+version: 1.0
+cabal-version: 1.11
+build-type: Simple
+license: AllRightsReserved
+stability: experimental
+data-files:
+    sample.log
+    error.log
+x-ghc-framework-version: 7.10.3-5.9-2
+x-last-ide-version: HfM1.2.1
+Executable cis19402ADTs
+  main-is: Cis194_02_ADTs.hs
+  buildable: True
+  build-depends:
+      base -any,
+      split -any
+  other-modules:
+      LogAnalysis
+      Log
