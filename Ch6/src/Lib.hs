@@ -1,8 +1,8 @@
 -- http://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf
 
 module Lib
-    ( knapsack01,
-    example,
+    (
+    knapsackExample,
     fib,
     fibs1,
     fibs2,
@@ -29,7 +29,7 @@ knapsack01 vs ws maxW = m!(numItems-1, maxW)
             [((i, 0), 0) | i <- [0..numItems-1]] ++
             [((i, w), best) | i <- [0..numItems-1], w <- [1..maxW], let best | ws!!i > w = m!(i-1, w) | otherwise = max (m!(i-1, w)) (m!(i-1, w-ws!!i) + vs!!i)]
 
-example = knapsack01 [3, 4, 5, 8, 10] [2, 3, 4, 5, 9] 20
+knapsackExample = knapsack01 [3, 4, 5, 8, 10] [2, 3, 4, 5, 9] 20
 
 
 -- Exercise 1
