@@ -2,7 +2,8 @@ module Lib
     ( knapsack01,
     example,
     fib,
-    fibs1
+    fibs1,
+    fibs2
     ) where
 
 import Data.Array
@@ -35,3 +36,12 @@ fibInner n a b = fibInner (n - 1) b (a + b)
 -- The infinite list of all Fibonacci numbers
 fibs1 :: [Integer]
 fibs1 = map fib [1..] 
+
+-- Exercise 2
+
+-- More efficient implementation for fibs
+fibs2 :: [Integer]
+fibs2 = fibs2Inner 1 1
+
+fibs2Inner :: Integer -> Integer -> [Integer]
+fibs2Inner a b = a: (fibs2Inner b (a + b))
