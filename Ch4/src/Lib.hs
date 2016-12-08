@@ -187,8 +187,7 @@ _xor a b
     | otherwise = True
 
 map' :: (a -> b) -> [a] -> [b]
-map' f = foldr ff []
-    where ff a xs = (f a):xs
+map' f = foldr ((:) . f) []
 
 myFoldl :: (a -> b -> a) -> a -> [b] -> a
 myFoldl f = foldr f'
