@@ -4,8 +4,11 @@ module Lib
     fib,
     fibs1,
     fibs2,
+    Stream (Empty, Stream),
     streamToList,
-    Stream (Empty, Stream)
+    streamRepeat,
+    streamMap,
+    streamFromSeed
     ) where
 
 import Data.Array
@@ -59,3 +62,15 @@ streamToList (Stream x stream) = x: (streamToList stream)
 
 instance Show a => Show (Stream a) where
     show stream = unwords $ map show $ take 20 $ streamToList stream
+
+-- Exercise 4
+
+streamRepeat :: a -> Stream a
+streamRepeat x = Stream x (streamRepeat x)
+
+streamMap :: (a -> b) -> Stream a -> Stream b
+streamMap _ Empty = Empty
+streamMap fun (Stream x stream) = Stream (fun x) (streamMap fun stream)
+
+streamFromSeed :: (a -> a) -> a -> Stream a
+streamFromSeed transform seed = Stream seed (streamFromSeed transform (transform seed))
