@@ -15,7 +15,23 @@ tests = TestList
     "length' [1, 2, 3, 4, 5]" ~: length' [1, 2, 3, 4, 5] ~?= 5,
     "sum'' [1, 2, 3, 4, 5]" ~: sum'' [1, 2, 3, 4, 5] ~?= 15,
     "product'' [1, 2, 3, 4, 5]" ~: product'' [1, 2, 3, 4, 5] ~?= 120,
-    "length'' [1, 2, 3, 4, 5]" ~: length'' [1, 2, 3, 4, 5] ~?= 5
+    "length'' [1, 2, 3, 4, 5]" ~: length'' [1, 2, 3, 4, 5] ~?= 5,
+    "fun1 [1, 2, 3, 4, 5]" ~: fun1 [1, 2, 3, 4, 5] ~?= 0,
+    "fun1 [1, 3, 4, 5]" ~: fun1 [1, 3, 4, 5] ~?= 2,
+    "fun1' [1, 2, 3, 4, 5]" ~: fun1' [1, 2, 3, 4, 5] ~?= 0,
+    "fun1' [1, 3, 4, 5]" ~: fun1' [1, 3, 4, 5] ~?= 2,
+    "fun2 1" ~: fun2 1 ~?= 0,
+    "fun2 2" ~: fun2 2 ~?= 2,
+    "fun2 3" ~: fun2 3 ~?= 40,
+    "fun2' 1" ~: fun2' 1 ~?= 0,
+    "fun2' 2" ~: fun2' 2 ~?= 2,
+    "fun2' 3" ~: fun2' 3 ~?= 40,
+    --"foldTree' \"abc\"" ~: foldTree "abc" ~?= Leaf
+    "rrRotate (Node 2 (Node 1 (Node 0 Leaf 1 Leaf) 2 (Node 0 Leaf 3 Leaf)) 4 (Node 0 Leaf 5 Leaf))" ~: rrRotate (Node 2 (Node 1 (Node 0 Leaf 1 Leaf) 2 (Node 0 Leaf 3 Leaf)) 4 (Node 0 Leaf 5 Leaf)) ~?= Node 2 (Node 0 Leaf 1 Leaf) 2 (Node 1 (Node 0 Leaf 3 Leaf) 4 (Node 0 Leaf 5 Leaf)),
+    "insertTree 3 Leaf" ~: insertTree 3 Leaf ~?= Node 0 Leaf 3 Leaf,
+    "insertTree 3 (Node 0 Leaf 1 Leaf)" ~: insertTree 3 (Node 0 Leaf 1 Leaf) ~?= Node 1 Leaf 1 (Node 0 Leaf 3 Leaf),
+    "foldTree [12]'" ~: foldTree [1, 2] ~?= Node 1 (Node 0 Leaf 1 Leaf) 2 Leaf,
+    "foldTree 'ABCDEFGHIJ'" ~: foldTree "ABCDEFGHIJ" ~?= Node 3 (Node 2 (Node 1 (Node 0 Leaf 'A' Leaf) 'B' Leaf) 'C' (Node 1 (Node 0 Leaf 'D' Leaf) 'E' (Node 0 Leaf 'F' Leaf))) 'G' (Node 1 (Node 0 Leaf 'H' Leaf) 'I' (Node 0 Leaf 'J' Leaf))
     ]
 
 main = do
