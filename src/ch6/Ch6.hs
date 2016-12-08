@@ -15,7 +15,8 @@ module Ch6
     streamMap,
     streamFromSeed,
     nats,
-    ruler
+    ruler,
+    fibs3
     ) where
 
 import Data.Array
@@ -122,7 +123,7 @@ instance Num (Stream Integer) where
     (+) (Stream x stream1) (Stream y stream2) = Stream (x + y) (stream1 + stream2)
     (+) Empty stream2 = stream2
     (+) stream1 Empty = stream1
-    -- Suppose A = a0 + xA0 and B = b0 + xB0
+    -- Suppose A = a0 + xA' and B = b0 + xB'
     -- AB = (a0 + xA')B
     --    = a0B + xA'B
     --    = a0(b0 + xB') + xA'B
@@ -130,3 +131,15 @@ instance Num (Stream Integer) where
     (*) (Stream a0 a') (Stream b0 b') = Stream (a0 * b0) (streamMap (* a0) b' + (a' * Stream b0 b'))
     (*) Empty _ = Empty
     (*) _ Empty = Empty
+
+-- Suppose A = a0 + xA' and B = b0 + xB'
+-- A/B = (a0 / b0) + x((1 / b0)(A' - QB'))
+instance Fractional (Stream Integer) where
+    (Stream a0 a') / (Stream b0 b') = q where
+        tr x0 = floor (fromIntegral x0 / fromIntegral b0 :: Double) 
+        hed = floor (fromIntegral a0 / fromIntegral b0 :: Double)
+        q = Stream hed (streamMap tr (a' - (q * b')))
+
+-- F(x) = x / (1 - x - x^2)
+fibs3 :: Stream Integer
+fibs3 = Stream 0 (Stream 1 Empty) / Stream 1 (Stream (-1) (Stream (-1) Empty))

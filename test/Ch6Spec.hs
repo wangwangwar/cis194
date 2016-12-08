@@ -64,3 +64,8 @@ main = hspec $ do
         it "returns the multiplication of two: 6x^3 + 7x^2 - 10x + 9 * -2x^3  + 4x - 5 = -12x^6 - 14x^5 + 44x^4 - 20x^3 - 75x^2 + 86x - 45 with (*)" $ do
             streamToList ((Stream 9 (Stream (-10) (Stream 7 (Stream 6 Empty))) * Stream (-5) (Stream 4 (Stream 0 (Stream (-2) Empty)))) :: Stream Integer) `shouldBe` [-45, 86, -75, -20, 44, -14, -12]
 
+        it "returns the division of two: (x^3 - 12x^2 - 42) / (x - 3) = x^2 - 9x - 27 with (/)" $ do
+            take 10 (streamToList ((Stream (-42) (Stream 0 (Stream (-12) (Stream 1 Empty)))) / (Stream (-3) (Stream 1 Empty)) :: Stream Integer)) `shouldBe` [-27, -9, 1]
+
+        it "fibs3" $ do
+            take 10 (streamToList fibs3) `shouldBe` [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
