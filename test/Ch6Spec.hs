@@ -69,3 +69,9 @@ main = hspec $ do
 
         it "fibs3" $ do
             take 10 (streamToList fibs3) `shouldBe` [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
+        it "Matrix2 * Matrix2" $ do
+            (Matrix2 1 1 1 0 :: Matrix2 Integer) * (Matrix2 1 1 1 0 :: Matrix2 Integer) `shouldBe` (Matrix2 2 1 1 1 :: Matrix2 Integer)
+
+        it "fib4 10 == 55" $ do
+            fib4 10 `shouldBe` 55

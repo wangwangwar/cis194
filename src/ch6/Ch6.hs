@@ -16,7 +16,9 @@ module Ch6
     streamFromSeed,
     nats,
     ruler,
-    fibs3
+    fibs3,
+    Matrix2 (..),
+    fib4
     ) where
 
 import Data.Array
@@ -143,3 +145,19 @@ instance Fractional (Stream Integer) where
 -- F(x) = x / (1 - x - x^2)
 fibs3 :: Stream Integer
 fibs3 = Stream 0 (Stream 1 Empty) / Stream 1 (Stream (-1) (Stream (-1) Empty))
+
+-- Exercise 7: Fibonacci numbers via matrices
+--
+data Matrix2 a = Matrix2 a a a a
+    deriving (Show, Eq)
+
+instance Num (Matrix2 Integer) where
+    (*) (Matrix2 a00 a01 a10 a11) (Matrix2 b00 b01 b10 b11) = 
+        Matrix2 (a00 * b00 + a01 * b10) (a00 * b01 + a01 * b11) (a10 * b00 + a11 * b10) (a10 * b01 + a11 * b11)
+
+fib4 :: Integer -> Integer
+fib4 0 = 0
+fib4 n = a11 (fib4Inner m n) where
+    a11 (Matrix2 _ _ _ a) = a
+    fib4Inner m n = foldl (*) m (replicate (fromIntegral n) m)
+    m = Matrix2 1 1 1 0
