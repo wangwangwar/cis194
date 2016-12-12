@@ -2,6 +2,7 @@ import Test.Hspec
 import Test.QuickCheck
 import System.IO
 import Ch7
+import JoinList
 
 
 main = hspec $ do
@@ -151,3 +152,18 @@ main = hspec $ do
         
         it "bool" $ do
             mconcat [False, True, False] `shouldBe` True
+
+    describe "JoinList" $ do
+        
+        it "(+++)" $ do
+            let j = JAppend (Product 210)
+                   (JAppend (Product 30) (JSingle (Product 5) 'y')
+                                       (JAppend (Product 6) (JSingle (Product 2) 'e')
+                                                          (JSingle (Product 3) 'a')))
+                    (JSingle (Product 7) 'h')
+            let j1 = JAppend (Product 30) (JSingle (Product 5) 'y')
+                                                   (JAppend (Product 6) (JSingle (Product 2) 'e')
+                                                                      (JSingle (Product 3) 'a'))
+            let j2 = (JSingle (Product 7) 'h')
+
+            j1 +++ j2 `shouldBe` j

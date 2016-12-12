@@ -142,3 +142,8 @@ prod = getProduct . mconcat . map Product $ lst
 instance Monoid Bool where
     mempty = False
     mappend = (||)
+
+
+-- Homework 7
+
+
