@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
 -- http://www.seas.upenn.edu/~cis194/spring13/lectures/07-folds-monoids.html
@@ -21,7 +22,12 @@ module Ch7
     ExprT (..),
     eval,
     eval2,
-    numLiterals
+    numLiterals,
+    prod,
+    Sum (..),
+    getSum,
+    Product (..),
+    getProduct
     ) where
 
 data Tree a = Empty
@@ -86,3 +92,53 @@ eval2 = exprTFold id (+) (*)
 
 numLiterals :: ExprT -> Int
 numLiterals = exprTFold (const 1) (+) (+)
+
+
+-- Monoids
+-- 
+-- class Monoid m where
+--     mempty :: m
+--     mappend :: m -> m -> m
+--     mconcat :: [m] -> m
+--     mconcat = foldr mappend mempty
+
+-- (<>) :: Monoid m => m -> m -> m
+-- (<>) = mappend
+
+-- instance Monoid [a] where
+--     mempty = []
+--     mappend = (++)
+
+newtype Sum a = Sum a
+    deriving (Eq, Ord, Num, Show)
+
+getSum :: Sum a -> a
+getSum (Sum a) = a
+
+instance Num a => Monoid (Sum a) where
+    mempty = Sum 0
+    mappend = (+)
+
+newtype Product a = Product a
+    deriving (Eq, Ord, Num, Show)
+
+getProduct :: Product a -> a
+getProduct (Product a) = a
+
+instance Num a => Monoid (Product a) where
+    mempty = Product 1
+    mappend = (*)
+
+lst :: [Integer]
+lst = [1, 5, 8, 23, 423, 99]
+
+prod :: Integer
+prod = getProduct . mconcat . map Product $ lst
+
+-- instance (Monoid a, Monoid b) => Monoid (a, b) where
+--     mempty = (mempty, mempty)
+--     (a, b) `mappend` (c, d) = (a `mappend` c, b `mappend` d)
+
+instance Monoid Bool where
+    mempty = False
+    mappend = (||)

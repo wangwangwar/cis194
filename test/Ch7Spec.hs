@@ -137,3 +137,17 @@ main = hspec $ do
         it "returns 2 for `Mul 3 4`" $ do
             numLiterals (Mul (Lit 3) (Lit 4)) `shouldBe` 2
 
+    describe "`prod`" $ do
+        
+        it "returns 1 * 5 * 8 * 23 * 423 * 99" $ do
+            prod `shouldBe` 1 * 5 * 8 * 23 * 423 * 99
+
+    describe "(Monoid a, Monoid b) => Monoid (a, b)" $ do
+        
+        it "[(1, 2), (3, 4), (5, 6), (7, 8)] => (16, 20)" $ do
+            mconcat [(Sum 1, Sum 2), (Sum 3, Sum 4), (Sum 5, Sum 6), (Sum 7, Sum 8)] `shouldBe` (Sum 16, Sum 20)
+
+    describe "Bool a => Monoid a" $ do
+        
+        it "bool" $ do
+            mconcat [False, True, False] `shouldBe` True
