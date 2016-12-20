@@ -26,6 +26,7 @@ library
                      , Ch6
                      , Ch7
                      , JoinList
+                     , Sized
   build-depends:       base >= 4.7 && < 5
                      , array
                      , mtl

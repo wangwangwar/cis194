@@ -3,6 +3,7 @@ import Test.QuickCheck
 import System.IO
 import Ch7
 import JoinList
+import Sized
 
 
 main = hspec $ do
@@ -154,6 +155,9 @@ main = hspec $ do
             mconcat [False, True, False] `shouldBe` True
 
     describe "JoinList" $ do
+        let empty = JEmpty :: JoinList Size String
+        let single x = JSingle (1 :: Size) x
+        let jl = (single 'y' +++ (single 'e' +++ single 'a')) +++ single 'h'
         
         it "(+++)" $ do
             let j = JAppend (Product 210)
@@ -167,3 +171,78 @@ main = hspec $ do
             let j2 = (JSingle (Product 7) 'h')
 
             j1 +++ j2 `shouldBe` j
+
+        describe "indexJ" $ do
+            context "with an Empty JoinList" $ do
+                it "returns Nothing" $ do
+                    indexJ 1 empty `shouldBe` Nothing
+
+            context "with a Single JoinList" $ do
+                context "with a 0 index" $ do
+                    it "returns the element" $ do
+                        let s = single 'a'
+                        indexJ 0 s `shouldBe` Just 'a'
+
+                context "with an index /= 0" $ do
+                    it "returns Nothing" $ do
+                        let s = single 'a'
+                        indexJ 1 s `shouldBe` Nothing
+
+            context "with an Append JoinList" $ do
+                it "returns the nth element" $ do
+                    indexJ (-1) jl `shouldBe` Nothing
+                    indexJ 0 jl `shouldBe` (jlToList jl) !!? 0
+                    indexJ 1 jl `shouldBe` (jlToList jl) !!? 1
+                    indexJ 2 jl `shouldBe` (jlToList jl) !!? 2
+                    indexJ 3 jl `shouldBe` (jlToList jl) !!? 3
+                    indexJ 4 jl `shouldBe` (jlToList jl) !!? 4
+                        
+        describe "dropJ" $ do
+            context "with an Empty JoinList" $ do
+                it "returns Nothing" $ do
+                    dropJ 0 empty `shouldBe` JEmpty
+                    
+            context "with a Single JoinList" $ do
+                context "with a 0 index" $ do
+                    it "returns the original JoinList" $ do
+                        let s = single 'a'
+                        dropJ 0 s `shouldBe` s
+
+                context "with an index > 0" $ do
+                    it "returns Nothing" $ do
+                        let s = single 'a'
+                        dropJ 1 s `shouldBe` JEmpty
+        
+            context "with an Append JoinList" $ do
+                    it "drops first n elements" $ do
+                        jlToList (dropJ (-1) jl) `shouldBe` jlToList jl
+                        jlToList (dropJ 0 jl) `shouldBe` drop 0 (jlToList jl)
+                        jlToList (dropJ 1 jl) `shouldBe` drop 1 (jlToList jl)
+                        jlToList (dropJ 2 jl) `shouldBe` drop 2 (jlToList jl)
+                        jlToList (dropJ 3 jl) `shouldBe` drop 3 (jlToList jl)
+                        jlToList (dropJ 4 jl) `shouldBe` jlToList JEmpty
+
+        describe "takeJ" $ do
+            context "with an Empty JoinList" $ do
+                it "returns Nothing" $ do
+                    takeJ 1 empty `shouldBe` JEmpty
+                    
+            context "with a Single JoinList" $ do
+                context "with a 0 index" $ do
+                    it "returns the Empty" $ do
+                        let s = single 'a'
+                        takeJ 0 s `shouldBe` JEmpty
+
+                context "with an index > 0" $ do
+                    it "returns the Single JoinList" $ do
+                        let s = single 'a'
+                        takeJ 1 s `shouldBe` s
+        
+            context "with an Append JoinList" $ do
+                    it "takes first n elements" $ do
+                        jlToList (takeJ (-1) jl) `shouldBe` jlToList JEmpty
+                        jlToList (takeJ 0 jl) `shouldBe` take 0 (jlToList jl)
+                        jlToList (takeJ 1 jl) `shouldBe` take 1 (jlToList jl)
+                        jlToList (takeJ 2 jl) `shouldBe` take 2 (jlToList jl)
+                        jlToList (takeJ 3 jl) `shouldBe` take 3 (jlToList jl)
+                        jlToList (takeJ 4 jl) `shouldBe` take 4 (jlToList jl)
