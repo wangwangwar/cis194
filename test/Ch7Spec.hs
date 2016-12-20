@@ -4,6 +4,7 @@ import System.IO
 import Ch7
 import JoinList
 import Sized
+import Data.Monoid
 
 
 main = hspec $ do

@@ -10,6 +10,7 @@ module JoinList
     ) where
 
 import Sized
+import Data.Monoid
 
 -- Monoidally Annotated Join-Lists
 

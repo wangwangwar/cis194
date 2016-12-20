@@ -24,11 +24,9 @@ module Ch7
     eval2,
     numLiterals,
     prod,
-    Sum (..),
-    getSum,
-    Product (..),
-    getProduct
     ) where
+
+import Data.Monoid
 
 data Tree a = Empty
     | Node (Tree a) a (Tree a)
@@ -101,33 +99,33 @@ numLiterals = exprTFold (const 1) (+) (+)
 --     mappend :: m -> m -> m
 --     mconcat :: [m] -> m
 --     mconcat = foldr mappend mempty
-
+-- 
 -- (<>) :: Monoid m => m -> m -> m
 -- (<>) = mappend
-
+-- 
 -- instance Monoid [a] where
 --     mempty = []
 --     mappend = (++)
-
-newtype Sum a = Sum a
-    deriving (Eq, Ord, Num, Show)
-
-getSum :: Sum a -> a
-getSum (Sum a) = a
-
-instance Num a => Monoid (Sum a) where
-    mempty = Sum 0
-    mappend = (+)
-
-newtype Product a = Product a
-    deriving (Eq, Ord, Num, Show)
-
-getProduct :: Product a -> a
-getProduct (Product a) = a
-
-instance Num a => Monoid (Product a) where
-    mempty = Product 1
-    mappend = (*)
+-- 
+-- newtype Sum a = Sum a
+--     deriving (Eq, Ord, Num, Show)
+-- 
+-- getSum :: Sum a -> a
+-- getSum (Sum a) = a
+-- 
+-- instance Num a => Monoid (Sum a) where
+--     mempty = Sum 0
+--     mappend = (+)
+-- 
+-- newtype Product a = Product a
+--     deriving (Eq, Ord, Num, Show)
+-- 
+-- getProduct :: Product a -> a
+-- getProduct (Product a) = a
+-- 
+-- instance Num a => Monoid (Product a) where
+--     mempty = Product 1
+--     mappend = (*)
 
 lst :: [Integer]
 lst = [1, 5, 8, 23, 423, 99]
