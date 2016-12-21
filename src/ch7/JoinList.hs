@@ -6,7 +6,11 @@ module JoinList
         (!!?),
         jlToList,
         dropJ,
-        takeJ
+        takeJ,
+        Score (..),
+        score,
+        scoreString,
+        scoreLine
     ) where
 
 import Sized
@@ -86,3 +90,35 @@ takeJ n xs@(JAppend _ left right)
     | n > (len left) = left +++ takeJ (n - (len left)) right
     | otherwise = takeJ n left
 takeJ _ _ = JEmpty
+
+-- Exercise 3
+
+data Score = Score Int
+    deriving (Eq, Show)
+
+instance Monoid Score where
+    mempty = Score 0
+    mappend = \(Score x) (Score y) -> Score (x + y)
+
+score :: Char -> Score
+score c
+    | c `elem` "esirantolu" = Score 1
+    | c `elem` "dg" = Score 2
+    | c `elem` "cpmb" = Score 3
+    | c `elem` "hyfvw" = Score 4
+    | c `elem` "k" = Score 5
+    | c `elem` "xj" = Score 8
+    | c `elem` "zq" = Score 10
+    | otherwise = Score 0
+
+scoreString :: String -> Score
+scoreString = mconcat . map score
+
+scoreLine :: String -> JoinList Score String
+scoreLine s = JSingle (scoreString s) s
+
+-- Exercise 4
+
+instance (Monoid a, Monoid b) => Monoid (a, b) where
+    mempty = (mempty, mempty)
+    mappend (a1, b1) (a2, b2) = (mappend a1 a2, mappend b1 b2)

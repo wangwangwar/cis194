@@ -247,3 +247,21 @@ main = hspec $ do
                         jlToList (takeJ 2 jl) `shouldBe` take 2 (jlToList jl)
                         jlToList (takeJ 3 jl) `shouldBe` take 3 (jlToList jl)
                         jlToList (takeJ 4 jl) `shouldBe` take 4 (jlToList jl)
+    
+    describe "Exercise 3 - Scrabble" $ do
+        describe "score" $ do
+            it "returns Score of the char" $ do
+                score 'a' `shouldBe` Score 1
+                score 'z' `shouldBe` Score 10
+                score '0' `shouldBe` Score 0
+                score ' ' `shouldBe` Score 0
+                score '!' `shouldBe` Score 0
+        
+        describe "scoreString" $ do
+            it "returns Score of the string" $ do
+                scoreString "yay " `shouldBe` Score 9
+                scoreString "haskell!" `shouldBe` Score 14
+        
+        describe "scoreLine" $ do
+            it "returns JoinList of score string" $ do
+                scoreLine "yay " +++ scoreLine "haskell!" `shouldBe` JAppend (Score 23) (JSingle (Score 9) "yay ") (JSingle (Score 14) "haskell!")
