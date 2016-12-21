@@ -10,3 +10,8 @@ http://www.seas.upenn.edu/~cis194/spring13/lectures.html
 stack setup
 stack test
 ```
+
+2. Build
+```
+stack build
+```
