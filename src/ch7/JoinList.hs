@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
+
 module JoinList
     (
         JoinList (..),
@@ -15,6 +17,7 @@ module JoinList
 
 import Sized
 import Data.Monoid
+import Buffer
 
 -- Monoidally Annotated Join-Lists
 
@@ -78,16 +81,16 @@ dropJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
 dropJ n xs
     | n <= 0 = xs
 dropJ n xs@(JAppend _ left right)
-    | n < (len left) = dropJ n left +++ right
-    | otherwise = dropJ (n - (len left)) right
+    | n < len left = dropJ n left +++ right
+    | otherwise = dropJ (n - len left) right
 dropJ _ _ = JEmpty
 
 -- takeJ returns the first n elements of a JoinList, dropping all other elements
 takeJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
 takeJ n xs
-    | n >= (len xs) = xs
+    | n >= len xs = xs
 takeJ n xs@(JAppend _ left right)
-    | n > (len left) = left +++ takeJ (n - (len left)) right
+    | n > len left = left +++ takeJ (n - len left) right
     | otherwise = takeJ n left
 takeJ _ _ = JEmpty
 
@@ -98,7 +101,7 @@ data Score = Score Int
 
 instance Monoid Score where
     mempty = Score 0
-    mappend = \(Score x) (Score y) -> Score (x + y)
+    mappend (Score x) (Score y) = Score (x + y)
 
 score :: Char -> Score
 score c
@@ -118,3 +121,19 @@ scoreLine :: String -> JoinList Score String
 scoreLine s = JSingle (scoreString s) s
 
 -- Exercise 4
+
+instance Buffer (JoinList (Score, Size) String) where
+
+    toString jl = mconcat (jlToList jl) 
+
+    fromString s = foldr ((+++) . (\s -> JSingle (scoreString s, 1 :: Size) s)) JEmpty (lines s)
+
+    line = indexJ
+
+    replaceLine n ln jl 
+        | n < 0 || n >= numLines jl = jl
+        | otherwise = takeJ n jl +++ fromString ln +++ dropJ (n + 1) jl
+
+    numLines jl = getSize size where (_, size) = tag jl
+
+    value jl = n where (Score n, _) = tag jl
