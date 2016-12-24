@@ -3,6 +3,7 @@ import Test.QuickCheck
 import System.IO
 import Ch8
 import Employee
+import Data.Monoid
 
 
 main = hspec $ do
@@ -29,3 +30,11 @@ main = hspec $ do
 
             it "returns a funer GuestList" $ do
                 moreFun gl1 gl2 `shouldBe` gl1
+
+        describe "treeFold" $ do
+            it "folds the Tree" $ do
+                let addFun e fun = empFun e + fun
+                treeFold addFun 0 testCompany `shouldBe` 46
+                
+                let lenOfName e l = length (empName e) + l
+                treeFold lenOfName 0 testCompany `shouldBe` 29

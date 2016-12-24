@@ -5,9 +5,11 @@ module Ch8
     (
     glCons,
     moreFun,
+    treeFold
     ) where
 
 import Employee
+import Data.Tree
 import Data.Monoid
 
 -- Exercise 1
@@ -40,4 +42,8 @@ moreFun gl1@(GL _ fun1) gl2@(GL _ fun2) = if fun1 > fun2 then gl1 else gl2
 -- Exercise 2
 
 treeFold :: (a -> b -> b) -> b -> Tree a -> b
-treeFold func b tree = (func (rootLabel tree) b) 
+treeFold func b t = func (rootLabel t) (treeListFold func b (subForest t))
+
+treeListFold :: (a -> b -> b) -> b -> [Tree a] -> b
+treeListFold func b [] = b
+treeListFold func b (t:ts) = treeListFold func (treeFold func b t) ts
