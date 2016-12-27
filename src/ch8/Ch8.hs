@@ -5,12 +5,16 @@ module Ch8
     (
     glCons,
     moreFun,
-    treeFold
+    treeFold,
+    nextLevel,
+    maxFun,
+    formatTree
     ) where
 
 import Employee
 import Data.Tree
 import Data.Monoid
+import Data.List
 
 -- Exercise 1
 
@@ -47,3 +51,39 @@ treeFold func b t = func (rootLabel t) (treeListFold func b (subForest t))
 treeListFold :: (a -> b -> b) -> b -> [Tree a] -> b
 treeListFold func b [] = b
 treeListFold func b (t:ts) = treeListFold func (treeFold func b t) ts
+
+-- Exercise 3
+
+-- takes two arguments. The first is the “boss” of the current subtree
+-- (let’s call him Bob). The second argument is a list of the results
+-- for each subtree under Bob. Each result is a pair of GuestLists: the
+-- first GuestList in the pair is the best possible guest list with the boss
+-- of that subtree; the second is the best possible guest list without the
+-- boss of that subtree. nextLevel should then compute the overall best
+-- guest list that includes Bob, and the overall best guest list that doesn’t
+-- include Bob.
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel emp [] = (GL [emp] (empFun emp), GL [] 0)
+nextLevel emp list = (glCons emp glWithoutBoss, glWithBoss)
+  where
+    glWithBoss = mconcat (map fst list)
+    glWithoutBoss = mconcat (map snd list)
+
+-- Exercise 4
+
+-- which takes a company hierarchy as input and outputs a fun-maximizing guest list.
+maxFun :: Tree Employee -> GuestList
+maxFun tree = uncurry moreFun $ nextLevelTree tree
+
+nextLevelTree :: Tree Employee -> (GuestList, GuestList)
+nextLevelTree tree = nextLevel emp list
+  where
+    emp = rootLabel tree
+    list = map nextLevelTree (subForest tree)
+
+-- Exercise 5
+formatTree :: Tree Employee -> String
+formatTree tree = "Total fun: " ++ show fun ++ "\n" ++ listString
+  where
+    (GL list fun) = maxFun tree
+    listString = foldr (\x y -> x ++ "\n" ++ y) "" $ sort $ map empName list

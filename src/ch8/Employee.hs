@@ -32,7 +32,7 @@ testCompany
 testCompany2 :: Tree Employee
 testCompany2
   = Node (Emp "Stan" 9)
-    [ Node (Emp "Bob" 3) -- (8, 8)
+    [ Node (Emp "Bob" 2) -- (8, 8)
       [ Node (Emp "Joe" 5) -- (5, 6)
         [ Node (Emp "John" 1) [] -- (1, 0)
         , Node (Emp "Sue" 5) [] -- (5, 0)

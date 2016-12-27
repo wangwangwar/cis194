@@ -58,6 +58,13 @@ executable ch7-jl-editor
                       , JoinList
                       , Sized
 
+executable ch8-company-fun
+    main-is:            companyFun.hs
+    hs-source-dirs:     src/ch8
+    build-depends:      base
+                      , containers
+    default-language:   Haskell2010
+
 test-suite Ch4-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
