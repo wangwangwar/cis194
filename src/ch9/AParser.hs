@@ -8,6 +8,10 @@ module AParser
     satisfy,
     char,
     posInt,
+    abParser,
+    abParser_,
+    intPair,
+    intOrUppercase
     ) where
 
 import           Control.Applicative
@@ -106,3 +110,54 @@ instance Applicative Parser where
         Just (x, xs) -> case runParser p2 xs of
           Nothing -> Nothing
           Just (y, ys) -> Just (x y, ys)
+
+-- Exercise 3
+
+-- We can also test your Applicative instance using other simple
+-- applications of functions to multiple parsers. You should implement
+-- each of the following exercises using the Applicative interface to put
+-- together simpler parsers into more complex ones. Do not implement
+-- them using the low-level definition of a Parser! In other words, pretend
+-- that you do not have access to the Parser constructor or even
+-- know how the Parser type is defined.
+abParser :: Parser (Char, Char)
+abParser = (\x y -> (x, y)) <$> satisfy (== 'a') <*> satisfy (== 'b')
+
+abParser_ :: Parser ()
+abParser_ = (\_ _ -> ()) <$> satisfy (== 'a') <*> satisfy (== 'b')
+
+intPair :: Parser [Integer]
+intPair = (\x _ y -> [x, y]) <$> posInt <*> satisfy (== ' ') <*> posInt
+
+-- Exercise 4
+
+-- Applicative by itself can be used to make parsers for simple, fixed
+-- formats. But for any format involving choice (e.g. “. . . after the colon
+-- there can be a number or a word or parentheses. . . ”) Applicative is
+-- not quite enough. To handle choice we turn to the Alternative class,
+-- defined (essentially) as follows:
+-- ```
+-- class Applicative f => Alternative f where
+--   empty :: f a
+--   (<|>) :: f a -> f a -> f a
+-- ```
+-- (<|>) is intended to represent choice: that is, f1 <|> f2 represents
+-- a choice between f1 and f2. empty should be the identity element for
+-- (<|>), and often represents failure.
+instance Alternative Parser where
+  -- empty represents the parser which always fails.
+  empty = Parser f where f s = Nothing
+  -- • p1 <|> p2 represents the parser which first tries running p1. If
+  -- p1 succeeds then p2 is ignored and the result of p1 is returned.
+  -- Otherwise, if p1 fails, then p2 is tried instead.
+  p1 <|> p2 = Parser f
+      where
+        f s = case runParser p1 s of
+          Nothing -> runParser p2 s
+          Just x -> Just x
+
+-- Exercise 5
+
+--  parses either an integer value or an uppercase character, and fails otherwise.
+intOrUppercase :: Parser ()
+intOrUppercase = const () <$> posInt <|> const () <$> satisfy isUpper
