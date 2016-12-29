@@ -1,7 +1,7 @@
 
 -- http://www.seas.upenn.edu/~cis194/spring13/hw/08-IO.pdf
 
-module Ch9
+module Ch10
     (
     Name,
     Employee (..)

@@ -3,14 +3,14 @@
 import Test.Hspec
 import Test.QuickCheck
 import System.IO
-import Ch9
+import Ch10
 import AParser
 import Data.Char
 import Control.Applicative
 
 
 main = hspec $ do
-  describe "Ch9" $ do
+  describe "Ch10" $ do
     describe "<*>" $ do
       let m_name1 :: Maybe Name = Nothing
       let m_name2 :: Maybe Name = Just "Brent"
