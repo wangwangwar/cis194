@@ -1,4 +1,4 @@
--- http://www.seas.upenn.edu/~cis194/spring13/hw/08-IO.pdf
+-- http://www.seas.upenn.edu/~cis194/spring13/lectures/12-monads.html
 
 module Ch12
     (
