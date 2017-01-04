@@ -9,7 +9,7 @@ import AParser
 import Data.Char
 import Control.Applicative hiding (ZipList, getZipList, (*>))
 import Prelude hiding (ZipList, (*>), sequenceA)
-
+import SExpr
 
 main = hspec $ do
   describe "Ch11" $ do
@@ -111,3 +111,60 @@ main = hspec $ do
 
         it "converts f a -> f [a]" $ do
           replicateA 3 (Just "a") `shouldBe` Just ["a", "a", "a"]
+
+  describe "Homework" $ do
+
+    describe "zeroOrMore" $ do
+
+      it "parses zero or more tokens" $ do
+        runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH" `shouldBe` Just ("ABC", "dEfgH")
+        runParser (zeroOrMore (satisfy isUpper)) "abcdeFGH" `shouldBe` Just ("", "abcdeFGH")
+
+    describe "oneOrMore" $ do
+
+      it "parses one or more tokens" $ do
+        runParser (oneOrMore (satisfy isUpper)) "ABCdEfgH" `shouldBe` Just ("ABC", "dEfgH")
+        runParser (oneOrMore (satisfy isUpper)) "abcdeFGH" `shouldBe` Nothing
+
+    describe "spaces" $ do
+
+      it "parses zero or more spaces" $ do
+        runParser spaces "ABCdEfgH" `shouldBe` Just ("", "ABCdEfgH")
+        runParser spaces " ABCdEfgH" `shouldBe` Just (" ", "ABCdEfgH")
+
+    describe "ident" $ do
+
+      it "parses an identifier" $ do
+        runParser ident "foobar baz" `shouldBe` Just ("foobar", " baz")
+        runParser ident "foo33fA" `shouldBe` Just ("foo33fA", "")
+        runParser ident "2bad" `shouldBe` Nothing
+        runParser ident "" `shouldBe` Nothing
+
+    describe "parseSExpr" $ do
+
+      it "parses S-expressions 5" $ do
+        runParser parseSExpr "5" `shouldBe` Just (A $ N 5, "")
+
+      it "parses S-expressions foo3" $ do
+        runParser parseSExpr "foo3" `shouldBe` Just (A $ I "foo3", "")
+
+      it "parses S-expressions (bar (foo) 3 5 874)" $ do
+        runParser parseSExpr "(bar (foo) 3 5 874)" `shouldNotBe` Nothing
+
+      it "parses S-expressions (((lambda x (lambda y (plus x y))) 3) 5)" $ do
+        runParser parseSExpr "(((lambda x (lambda y (plus x y))) 3) 5)" `shouldNotBe` Nothing
+
+      it "parses S-expressions (    lots   of    (   spaces   in  )  this ( one ) )" $ do
+        runParser parseSExpr "(    lots   of    (   spaces   in  )  this ( one ) )" `shouldNotBe` Nothing
+
+      it "parses S-expressions \"3abc\" is valid" $ do
+        runParser parseSExpr "3abc" `shouldBe` Just (A $ N 3, "abc")
+
+      it "parses S-expressions \"(3abc)\" is valid" $ do
+        runParser parseSExpr "(3abc)" `shouldBe` Just (A $ N 3, "abc")
+
+      it "parses S-expressions \"(abc 3\" is invalid" $ do
+        runParser parseSExpr "(abc 3" `shouldBe` Nothing
+
+      it "parses S-expressions \"\" is invalid" $ do
+        runParser parseSExpr "" `shouldBe` Nothing
