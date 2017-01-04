@@ -11,7 +11,8 @@ module SExpr
     Ident,
     Atom (..),
     SExpr (..),
-    parseSExpr
+    parseSExpr,
+    spacesWith
     )
 where
 

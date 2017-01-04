@@ -24,6 +24,7 @@ library
                      , src/ch8
                      , src/ch10
                      , src/ch11
+                     , src/ch12
   exposed-modules:     Ch1
                      , Ch2
                      , Ch3
@@ -43,6 +44,7 @@ library
                      , AParser
                      , Ch11
                      , SExpr
+                     , Ch12
   build-depends:       base >= 4.7 && < 5
                      , array
                      , containers
@@ -150,6 +152,17 @@ test-suite Ch11-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Ch11Spec.hs
+  build-depends:       base
+                     , QuickCheck
+                     , hspec
+                     , cis194
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite Ch12-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Ch12Spec.hs
   build-depends:       base
                      , QuickCheck
                      , hspec
