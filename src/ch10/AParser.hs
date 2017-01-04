@@ -101,7 +101,7 @@ instance Functor Parser where
 instance Applicative Parser where
   pure a = Parser f
     where
-      f _ = Just (a, [])
+      f s = Just (a, s)
 
   p1 <*> p2 = Parser f
     where
