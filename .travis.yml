@@ -5,4 +5,4 @@ script:
 notifications:
   slack:
     rooms:
-      - 3idiots:KFfYB69A5qfyP98uDes88LoO#general
+      - 3idiots:KFfYB69A5qfyP98uDes88LoO#notifications
