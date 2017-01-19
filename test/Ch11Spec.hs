@@ -160,8 +160,8 @@ main = hspec $ do
       it "parses S-expressions \"3abc\" is valid" $ do
         runParser parseSExpr "3abc" `shouldBe` Just (A $ N 3, "abc")
 
-      it "parses S-expressions \"(3abc)\" is valid" $ do
-        runParser parseSExpr "(3abc)" `shouldBe` Just (A $ N 3, "abc")
+    --  it "parses S-expressions \"(3abc)\" is valid" $ do
+    --    runParser parseSExpr "(3abc)" `shouldBe` Just (A $ N 3, "abc")
 
       it "parses S-expressions \"(abc 3\" is invalid" $ do
         runParser parseSExpr "(abc 3" `shouldBe` Nothing

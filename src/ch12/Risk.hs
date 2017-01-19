@@ -19,6 +19,7 @@ module Risk
 import Control.Monad.Random
 import Data.Monoid
 import Data.List
+import System.Random
 
 ------------------------------------------------------------
 -- Die values

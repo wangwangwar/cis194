@@ -51,6 +51,7 @@ library
                      , containers
                      , mtl
                      , MonadRandom
+                     , random
   default-language:    Haskell2010
 
 
